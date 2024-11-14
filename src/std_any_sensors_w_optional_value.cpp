@@ -163,6 +163,36 @@ std::string AddStrVal(class StringSensor& ssens)
     return(val);
 }
 
+template <typename T>
+std::string AddVal(T& sensor)
+{
+    // if constexpr (std::is_same<T, class IntSensor>()) 
+    if ( std::is_same<T, class IntSensor>() )
+    {
+        std::cout << "IntSensor" << std::endl;
+
+        return(std::to_string(sensor.GetValue()));
+    }
+    else if ( std::is_same<T, class FloatSensor>() )
+    {
+        std::cout << "FloatSensor" << std::endl;
+
+        return(std::to_string(sensor.GetValue()));
+    }
+    else if ( std::is_same<T, class StringSensor>() )
+    {
+        std::cout << "StringSensor" << std::endl;
+
+        return(std::to_string( sensor.GetValue() ));
+    }
+    else
+    {
+        std::cout << "ERROR: unknown sensor!" << std::endl;
+
+        return("<unknown>");    // Or, return EMPTY string??? (but, we should NEVER get here!!!)
+    }
+}
+
 
 /**********************************************************************************/
 
@@ -202,15 +232,18 @@ std::string process_any(std::any& sensor)
     {
         if ( sensor.type() == typeid(class IntSensor) )
         {
-            result = AddIntVal( std::any_cast<struct IntSensor&>(sensor) );
+            //result = AddIntVal( std::any_cast<struct IntSensor&>(sensor) );
+            result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
         }
         else if ( sensor.type() == typeid(class FloatSensor) )
         {
-            result = AddFloatVal( std::any_cast<struct FloatSensor&>(sensor) );
+            //result = AddFloatVal( std::any_cast<struct FloatSensor&>(sensor) );
+            result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
         }
         else if ( sensor.type() == typeid(class StringSensor) )
         {
-            result = AddStrVal( std::any_cast<struct StringSensor&>(sensor) );
+            //result = AddStrVal( std::any_cast<struct StringSensor&>(sensor) );
+            result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
         }  
         else
         {
