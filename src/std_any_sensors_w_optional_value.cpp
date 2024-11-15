@@ -166,24 +166,26 @@ std::string AddStrVal(class StringSensor& ssens)
 template <typename T>
 std::string AddVal(T& sensor)
 {
-    // if constexpr (std::is_same<T, class IntSensor>()) 
-    if ( std::is_same<T, class IntSensor>() )
+    if constexpr (std::is_same<T, class IntSensor>()) 
+    //if ( std::is_same<T, class IntSensor>() )
     {
         std::cout << "IntSensor" << std::endl;
 
         return(std::to_string(sensor.GetValue()));
     }
-    else if ( std::is_same<T, class FloatSensor>() )
+    if constexpr (std::is_same<T, class FloatSensor>()) 
+    //else if ( std::is_same<T, class FloatSensor>() )
     {
         std::cout << "FloatSensor" << std::endl;
 
         return(std::to_string(sensor.GetValue()));
     }
-    else if ( std::is_same<T, class StringSensor>() )
+    if constexpr (std::is_same<T, class StringSensor>()) 
+    //else if ( std::is_same<T, class StringSensor>() )
     {
         std::cout << "StringSensor" << std::endl;
 
-        return(std::to_string( sensor.GetValue() ));
+        return(sensor.GetValue());
     }
     else
     {
@@ -238,12 +240,12 @@ std::string process_any(std::any& sensor)
         else if ( sensor.type() == typeid(class FloatSensor) )
         {
             //result = AddFloatVal( std::any_cast<struct FloatSensor&>(sensor) );
-            result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
+            result = AddVal( std::any_cast<struct FloatSensor&>(sensor) );
         }
         else if ( sensor.type() == typeid(class StringSensor) )
         {
             //result = AddStrVal( std::any_cast<struct StringSensor&>(sensor) );
-            result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
+            result = AddVal( std::any_cast<struct StringSensor&>(sensor) );
         }  
         else
         {
