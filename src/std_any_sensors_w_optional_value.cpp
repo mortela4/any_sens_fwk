@@ -134,7 +134,7 @@ class UnknownSensor{};
 
 
 // Handlers:
-
+/*
 std::string AddFloatVal(class FloatSensor& fsens)
 {
     const auto val = fsens.GetValue();
@@ -162,28 +162,27 @@ std::string AddStrVal(class StringSensor& ssens)
     
     return(val);
 }
+*/
 
+// Or - just a single, unified handler:
 template <typename T>
 std::string AddVal(T& sensor)
 {
     if constexpr (std::is_same<T, class IntSensor>()) 
-    //if ( std::is_same<T, class IntSensor>() )
     {
-        std::cout << "IntSensor" << std::endl;
+        //std::cout << "IntSensor" << std::endl;
 
         return(std::to_string(sensor.GetValue()));
     }
-    if constexpr (std::is_same<T, class FloatSensor>()) 
-    //else if ( std::is_same<T, class FloatSensor>() )
+    else if constexpr (std::is_same<T, class FloatSensor>()) 
     {
-        std::cout << "FloatSensor" << std::endl;
+        //std::cout << "FloatSensor" << std::endl;
 
         return(std::to_string(sensor.GetValue()));
     }
-    if constexpr (std::is_same<T, class StringSensor>()) 
-    //else if ( std::is_same<T, class StringSensor>() )
+    else if constexpr (std::is_same<T, class StringSensor>()) 
     {
-        std::cout << "StringSensor" << std::endl;
+        //std::cout << "StringSensor" << std::endl;
 
         return(sensor.GetValue());
     }
@@ -234,17 +233,14 @@ std::string process_any(std::any& sensor)
     {
         if ( sensor.type() == typeid(class IntSensor) )
         {
-            //result = AddIntVal( std::any_cast<struct IntSensor&>(sensor) );
             result = AddVal( std::any_cast<struct IntSensor&>(sensor) );
         }
         else if ( sensor.type() == typeid(class FloatSensor) )
         {
-            //result = AddFloatVal( std::any_cast<struct FloatSensor&>(sensor) );
-            result = AddVal( std::any_cast<struct FloatSensor&>(sensor) );
+           result = AddVal( std::any_cast<struct FloatSensor&>(sensor) );
         }
         else if ( sensor.type() == typeid(class StringSensor) )
         {
-            //result = AddStrVal( std::any_cast<struct StringSensor&>(sensor) );
             result = AddVal( std::any_cast<struct StringSensor&>(sensor) );
         }  
         else
@@ -291,10 +287,14 @@ int main()
     
     std::array<std::any,5> mySensors{f1, f2, f3, f4, f5};
     
-    std::string result{collect_data(mySensors)};
+    std::string result{collect_data(mySensors, true)};
     
     std::cout << "\nRESULT: " << result << std::endl << std::endl;  
     
+    result = collect_data(mySensors, true);
+    
+    std::cout << "\nRESULT: " << result << std::endl;
+
     result = collect_data(mySensors, false);
     
     std::cout << "\nRESULT: " << result << std::endl;
